@@ -8,8 +8,8 @@ require("./src/db/db");
 
 const indexRouter = require("./src/routes/index");
 const usersRouter = require("./src/routes/users");
-const paymentsRouter = require("./src/routes/payments");
-const { hashGenerator } = require("./src/utils/auth/hashGenerator");
+const paymentsRouter = require("./src/routes/payment");
+const orderRouter = require("./src/routes/order");
 
 const app = express();
 
@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/payments", paymentsRouter);
+app.use("/payment", paymentsRouter);
+app.use("/order", orderRouter);
 
 module.exports = app;

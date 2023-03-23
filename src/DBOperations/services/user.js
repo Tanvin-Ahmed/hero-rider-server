@@ -21,7 +21,7 @@ const findUsers = async (limit, page) => {
 };
 
 const modifyUsersStatus = async (info) => {
-  const _ids = info?._ids?.map((id) => mongoose.Types.ObjectId(id));
+  const _ids = info?._ids?.map((id) => new mongoose.Types.ObjectId(id));
 
   return await userModel.updateMany(
     { _id: _ids },
