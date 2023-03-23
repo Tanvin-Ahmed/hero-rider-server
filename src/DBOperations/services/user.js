@@ -13,6 +13,26 @@ const findUserTotalCount = async () => {
   return await userModel.countDocuments({});
 };
 
+const findUserTotalCountByEmail = async (email) => {
+  return await userModel.countDocuments({ email: new RegExp(email, "i") });
+};
+
+const findUserTotalCountByPhone = async (phone) => {
+  return await userModel.countDocuments({ phone: new RegExp(phone, "i") });
+};
+
+const findUserTotalCountByFullName = async (fullName) => {
+  return await userModel.countDocuments({
+    fullName: new RegExp(fullName, "i"),
+  });
+};
+
+const findUserTotalCountByAgeRange = async (ageRange) => {
+  return await userModel.countDocuments({
+    age: { $gte: ageRange.from, $lte: ageRange.to },
+  });
+};
+
 const findUsers = async (limit, page) => {
   return await userModel
     .find({})
@@ -29,22 +49,32 @@ const modifyUsersStatus = async (info) => {
   );
 };
 
-const findUsersByEmail = async (email) => {
-  return await userModel.find({ email: new RegExp(email, "i") });
+const findUsersByEmail = async (email, limit, page) => {
+  return await userModel
+    .find({ email: new RegExp(email, "i") })
+    .skip((page - 1) * limit)
+    .limit(limit);
 };
 
-const findUsersByName = async (name) => {
-  return await userModel.find({ fullName: new RegExp(name, "i") });
+const findUsersByName = async (name, limit, page) => {
+  return await userModel
+    .find({ fullName: new RegExp(name, "i") })
+    .skip((page - 1) * limit)
+    .limit(limit);
 };
 
-const findUsersByPhone = async (phone) => {
-  return await userModel.find({ phone: new RegExp(phone, "i") });
+const findUsersByPhone = async (phone, limit, page) => {
+  return await userModel
+    .find({ phone: new RegExp(phone, "i") })
+    .skip((page - 1) * limit)
+    .limit(limit);
 };
 
-const findUsersByAgeRange = async (ageRange) => {
-  return await userModel.find({
-    age: { $gte: ageRange.from, $lte: ageRange.to },
-  });
+const findUsersByAgeRange = async (ageRange, limit, page) => {
+  return await userModel
+    .find({ age: { $gte: ageRange.from, $lte: ageRange.to } })
+    .skip((page - 1) * limit)
+    .limit(limit);
 };
 
 module.exports = {
@@ -57,4 +87,8 @@ module.exports = {
   findUsersByAgeRange,
   findUserTotalCount,
   findUsers,
+  findUserTotalCountByEmail,
+  findUserTotalCountByPhone,
+  findUserTotalCountByFullName,
+  findUserTotalCountByAgeRange,
 };

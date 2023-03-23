@@ -12,6 +12,10 @@ const {
   findUsersByAgeRange,
   findUserTotalCount,
   findUsers,
+  findUserTotalCountByEmail,
+  findUserTotalCountByPhone,
+  findUserTotalCountByFullName,
+  findUserTotalCountByAgeRange,
 } = require("../services/user");
 
 const register = async (req, res) => {
@@ -99,6 +103,46 @@ const getTotalUserCount = async (req, res) => {
   }
 };
 
+const getTotalUserCountByEmail = async (req, res) => {
+  try {
+    const count = await findUserTotalCountByEmail(req.query.email);
+
+    return res.status(200).json({ count });
+  } catch (error) {
+    return res.status(404).json({ message: "Users not found." });
+  }
+};
+
+const getTotalUserCountByPhone = async (req, res) => {
+  try {
+    const count = await findUserTotalCountByPhone(req.query.phone);
+
+    return res.status(200).json({ count });
+  } catch (error) {
+    return res.status(404).json({ message: "Users not found." });
+  }
+};
+
+const getTotalUserCountByFullName = async (req, res) => {
+  try {
+    const count = await findUserTotalCountByFullName(req.query.fullName);
+
+    return res.status(200).json({ count });
+  } catch (error) {
+    return res.status(404).json({ message: "Users not found." });
+  }
+};
+
+const getTotalUserCountByAgeRange = async (req, res) => {
+  try {
+    const count = await findUserTotalCountByAgeRange(req.body);
+
+    return res.status(200).json({ count });
+  } catch (error) {
+    return res.status(404).json({ message: "Users not found." });
+  }
+};
+
 const getUsers = async (req, res) => {
   try {
     const { limit, page } = req.query;
@@ -126,9 +170,9 @@ const updateUsersStatus = async (req, res) => {
 
 const getUsersByFullName = async (req, res) => {
   try {
-    const name = req.query.name;
+    const { name, limit, page } = req.query;
 
-    const users = await findUsersByName(name);
+    const users = await findUsersByName(name, limit, page);
 
     return res.status(200).json(users);
   } catch (error) {
@@ -138,8 +182,8 @@ const getUsersByFullName = async (req, res) => {
 
 const getUsersByEmail = async (req, res) => {
   try {
-    const email = req.query.email;
-    const users = await findUsersByEmail(email);
+    const { email, limit, page } = req.query;
+    const users = await findUsersByEmail(email, limit, page);
     return res.status(200).json(users);
   } catch (error) {
     return res.status(404).json({ message: "Users not found!" });
@@ -148,8 +192,8 @@ const getUsersByEmail = async (req, res) => {
 
 const getUsersByPhone = async (req, res) => {
   try {
-    const phone = req.query.phone;
-    const users = await findUsersByPhone(phone);
+    const { phone, limit, page } = req.query;
+    const users = await findUsersByPhone(phone, limit, page);
     return res.status(200).json(users);
   } catch (error) {
     return res.status(404).json({ message: "Users not found!" });
@@ -158,8 +202,8 @@ const getUsersByPhone = async (req, res) => {
 
 const getUsersByAgeRange = async (req, res) => {
   try {
-    const range = req.body;
-    const users = await findUsersByAgeRange(range);
+    const { range, limit, page } = req.body;
+    const users = await findUsersByAgeRange(range, limit, page);
     return res.status(200).json(users);
   } catch (error) {
     return res.status(404).json({ message: "Users not found!" });
@@ -176,4 +220,8 @@ module.exports = {
   updateUsersStatus,
   getTotalUserCount,
   getUsers,
+  getTotalUserCountByEmail,
+  getTotalUserCountByPhone,
+  getTotalUserCountByFullName,
+  getTotalUserCountByAgeRange,
 };
